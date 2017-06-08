@@ -1,29 +1,33 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-c=100
-x = np.arange(1, c+1)
-y = 2 * x + np.random.randn(c) * 2
-X = np.vstack((x, y))
-print(X)
+from sklearn.datasets import load_iris
+iris = load_iris()
+X = iris.data
+y = iris.target
 
-Xcentered = (X[0] - x.mean(), X[1] - y.mean())
-m = (x.mean(), y.mean())
+for name, label in [('Setosa', 0), ('Versicolour', 1), ('Virginica', 2)]:
+    m = (X[y == label, 0].mean(), X[y == label, 1].mean(), X[y == label, 2].mean())
+    Xcentered0 = X[y == label, 0] - m[0]
+    Xcentered1 = X[y == label, 1] - m[1]
+    Xcentered2 = X[y == label, 2] - m[2]
+
+Xcentered = (Xcentered0, Xcentered1, Xcentered2)
 print(Xcentered)
 print("Mean vector: ", m)
 
 covmat = np.cov(Xcentered)
 print(covmat, "\n")
-print("Variance of X: ", np.cov(Xcentered)[0, 0])
-print("Variance of Y: ", np.cov(Xcentered)[1, 1])
-print("Covariance X and Y: ", np.cov(Xcentered)[0, 1])
 
 # снижение размерности
 _, vecs = np.linalg.eig(covmat)
-v = -vecs[:, 1]
+v = -vecs[:, :]
 Xnew = np.dot(v, Xcentered)
-print(Xnew)
+print("Xnew: ", Xnew)
 
-plt.figure(figsize=(8, 8))
-plt.scatter(Xnew[0:c/2], Xnew[c/2:c+1])
-plt.show()
+#colors = ['navy', 'turquoise', 'darkorange']
+#plt.figure(figsize=(8, 8))
+#for name, label in [('Setosa', 0), ('Versicolour', 1), ('Virginica', 2)]:
+#        plt.scatter(Xnew[y == label, 0], Xnew[y == label, 1])
+#plt.show()
+
