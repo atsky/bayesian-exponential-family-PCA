@@ -15,7 +15,7 @@ Xcentered1 = X[:, 1] - m[1]
 Xcentered2 = X[:, 2] - m[2]
 Xcentered3 = X[:, 3] - m[3]
 
-Xcentered = (Xcentered0, Xcentered1, Xcentered2, Xcentered3)
+Xcentered = (X - X.mean(axis=0)).T
 print(Xcentered)
 print("Mean vector: ", m)
 
@@ -27,9 +27,9 @@ print(covmat)
 # снижение размерности
 _, vecs = np.linalg.eig(covmat)
 print(vecs)
-v = vecs[:, :]
+v = vecs.T
 Xnew = np.dot(v, Xcentered)
-
+print("Xnew   ", Xnew)
 colors = ['navy', 'turquoise', 'darkorange']
 plt.figure(figsize=(8, 8))
 
